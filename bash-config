@@ -141,10 +141,11 @@ remove_config(){
 remove_parameter(){
     get_line_number
     [[ -n $line_number ]] && sed -i "${line_number}d" "$config" 2>/dev/null
-
     if grep -q "^${parameter}${separator}" "$config" 2>/dev/null; then
         error "Failed to remove parameter '$parameter' from '$config'"
         exit 1
+    elif [[ -f $config && ! -s $config ]]; then  # remove config if empty
+        remove_config
     fi
 }
 
