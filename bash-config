@@ -1,0 +1,239 @@
+#!/bin/bash
+#
+# Read and write config files from Bash
+
+
+declare -r SCRIPTNAME='bash-config'
+declare -r VERSION='0.1.dev1'
+
+declare -r SEPARATOR_BASH='='
+declare -r SEPARATOR_INI=' = '
+
+
+error(){
+    echo "ERROR: $@" >&2
+}
+
+get_line_number(){
+    set_mode
+    local output=$(sed -n "/^${parameter}${separator}/=" "$config" 2>/dev/null)
+    [[ $output =~ ^[1-9][0-9]*$ ]] && line_number="$output"
+}
+
+main(){
+    scriptfile=${0##*/}
+
+    if [[ $1 =~ ^(-b|--bash)$ ]]; then
+        option_mode=bash
+    elif [[ $1 =~ ^(-c|--custom)$ ]]; then
+        option_mode=custom
+    elif [[ $1 =~ ^(-i|--ini)$ ]]; then
+        option_mode=ini
+    fi
+
+    local args
+    if [[ $option_mode = bash || $option_mode = ini ]]; then
+        args=$(($# - 1))
+        config=$2
+        parameter=$3
+        value=$4
+    elif [[ $option_mode = custom ]]; then
+        args=$(($# - 2))
+        separator_custom=$2
+        config=$3
+        parameter=$4
+        value=$5
+    else
+        args=$#
+        config=$1
+        parameter=$2
+        value=$3
+    fi
+
+    if (( args == 0 )); then
+        error "No arguments"
+        see_help_msg
+        exit 1
+    elif (( args == 1 )) && [[ $1 =~ ^(-h|--help)$ ]]; then
+        usage
+    elif (( args == 1 )) && [[ $1 =~ ^(-v|--version)$ ]]; then
+        echo "$SCRIPTNAME $VERSION"
+        exit 0
+    elif (( args == 2 )); then
+        if [[ $parameter = % ]]; then
+            # DELETE CONFIG
+            if [[ ! -f $config ]]; then
+                error "'$config' does not exist"
+                exit 1
+            elif [[ ! -w $config ]]; then
+                error "Lacking write perms to '$config'"
+                exit 1
+            else
+                remove_config
+            fi
+        else
+            # READ PARAMETER
+            if [[ ! -f $config ]]; then
+                error "'$config' does not exist"
+                exit 1
+            elif [[ ! -r $config ]]; then
+                error "No read access to '$config'"
+                exit 1
+            else
+                read_parameter
+            fi
+        fi
+    elif (( args == 3 )); then
+        if [[ $value = % ]]; then
+            # DELETE PARAMETER
+            if [[ ! -f $config ]]; then
+                error "'$config' does not exist"
+                exit 1
+            elif [[ ! -w $config ]]; then
+                error "No write access to '$config'"
+                exit 1
+            else
+                remove_parameter
+            fi
+        else
+            # WRITE PARAMETER
+            if [[ -f $config && ! -w $config ]]; then
+                error "No write access to '$config'"
+                exit 1
+            else
+                write_parameter
+            fi
+        fi
+    else
+        error "Invalid arguments"
+        see_help_msg
+        exit 1
+    fi
+}
+
+read_parameter(){
+    set_mode
+
+    local output=$(sed -n "s/^${parameter}${separator}//p" "$config" 2>/dev/null)
+
+    if [[ -n $output ]]; then
+        echo "$output"
+    else
+        if grep -q "^${parameter}${separator}$" "$config" 2>/dev/null; then
+            error "'$parameter' is set to null in '$config'"
+            exit 0
+        else
+            error "No match for '$parameter' in '$config'"
+            exit 1
+        fi
+    fi
+}
+
+remove_config(){
+    rm -f "$config" >/dev/null 2>&1
+
+    if [[ -f $config ]]; then
+        error "Failed to remove '$config'"
+        exit 1
+    fi
+}
+
+remove_parameter(){
+    get_line_number
+    [[ -n $line_number ]] && sed -i "${line_number}d" "$config" 2>/dev/null
+
+    if grep -q "^${parameter}${separator}" "$config" 2>/dev/null; then
+        error "Failed to remove parameter '$parameter' from '$config'"
+        exit 1
+    fi
+}
+
+sanitize_parameter(){
+    if [[ ! $parameter =~ ^[A-Za-z0-9_-]\+$ ]]; then
+        error "Parameter may consist of A-Z, a-z, 0-9, underscores, and dashes (no spaces or special characters)"
+        exit 1
+    fi
+}
+
+see_help_msg(){
+    echo "Try '$scriptfile --help' for more information." >&2
+}
+
+set_mode(){
+    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_BASH}" "$config" 2>/dev/null && mode+=(bash)
+    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_INI}" "$config" 2>/dev/null && mode+=(ini)
+    [[ $option_mode = custom ]] && grep -q "^[A-Za-z0-9_-]\+${separator_custom}" "$config" 2>/dev/null && mode+=(custom)
+
+    if (( ${#mode[@]} > 1 )); then
+        error "Unable to determine a consistent configuration file format. Are you sure '$config' is a config file?"
+        exit 1
+    fi
+
+    if [[ -n $option_mode ]]; then  # OPTION IS SET
+        if [[ -n ${mode[0]} && ( ${mode[0]} != $option_mode ) ]]; then  # use detected mode in the event of a conflicting option
+            echo "WARNING: '$config' was intified as ${mode[0]} mode (ignoring $option_mode option)" >&2
+            mode=${mode[0]}
+        else
+            mode=$option_mode  # use optioned mode
+        fi
+    elif [[ -n ${mode[0]} ]]; then  # NO OPTION IS SET and we have detected mode
+        mode=${mode[0]}  # use detected mode
+    fi
+
+    set_separator $mode
+}
+
+set_separator(){
+    if [[ $1 = custom ]]; then
+        separator=$separator_custom
+    elif [[ $1 = ini ]]; then
+        separator=$SEPARATOR_INI
+    else
+        separator=$SEPARATOR_BASH  # default to bash mode
+    fi
+}
+
+usage(){
+        cat <<-EOF
+		Usage: $scriptfile [OPTION] <config file> <parameter> [value]
+		Read and write config files from bash.
+
+		  -b, --bash            use bash mode ex. '='
+		  -c, --custom          use custom separator string
+		  -i, --ini             use ini mode ex. ' = '
+		  -v, --version         show program's version number and exit
+
+		- Enter a value to create or update an entry
+		- Specify only a parameter to print the currently set value (if any)
+		- Use '%' to delete the config file or a specific parameter
+		EOF
+        exit 0
+}
+
+verify_write(){
+    if [[ $(grep "^${parameter}${separator}${value}$" "$config" 2>/dev/null) != "${parameter}${separator}${value}" ]]; then
+        error "Failed to write '${parameter}${separator}${value}' to '$config'"
+        exit 1
+    fi
+}
+
+write_parameter(){
+    if [[ -f $config ]]; then
+        get_line_number
+        if [[ -n $line_number ]]; then
+            sed -i "${line_number}c${parameter}${separator}${value}" "$config" 2>/dev/null
+        else
+            echo "${parameter}${separator}${value}" >> "$config"
+            sort -o "$config" "$config"
+        fi
+    else
+        set_separator $option_mode
+        echo "${parameter}${separator}${value}" >> "$config"
+    fi
+    verify_write
+}
+
+
+if [[ ${FUNCNAME[-1]} = main ]]; then
+    main "$@"
+fi
