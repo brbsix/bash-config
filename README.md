@@ -1,5 +1,4 @@
-bash-config
-===========
+# bash-config
 
 Bash script to interact with configuration files. Great for easily implementing basic config files in all of your Android, Linux, or OSX shell scripts.
 
