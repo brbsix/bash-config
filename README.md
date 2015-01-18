@@ -4,7 +4,7 @@ Bash script to interact with configuration files. Great for easily implementing 
 
 
 Features
---------
+-----
 
 * read/write/delete parameters with values
 * create and delete config files
@@ -14,39 +14,39 @@ Features
     * Window's ini-style
     * use custom delimeter
 
-   Install
-   -----
+Installation
+-----
    
-   Copy bash-config to /usr/local/bin and then mark as executable.
+Copy bash-config to /usr/local/bin and then mark as executable.
    
-   ```sudo chmod a+x /usr/local/bin/bash-config```
+```sudo chmod a+x /usr/local/bin/bash-config```
 
-   Usage
-   -----
+Usage
+-----
 
-   When accessing values, the config style is autodetected. When storing a value in a new file, it defaults to Bash-style (i.e. ```PARAMETER=value```).
+When accessing values, the config style is autodetected. When storing a value in a new file, it defaults to Bash-style (i.e. ```PARAMETER=value```).
    
    
-   To create the first entry in an ini-style file (i.e. ```PARAMETER = value```):
-   
-      ```bash-config --ini FILE parameter value```
-   
-   
-   To use a custom separator (i.e. ```PARAMETER:value```) for read and write operations:
-   
-      ```bash-config --custom : FILE parameter value```
-   
-   
-   To access parameter value:
-   
-      ```bash-config FILE parameter```
+To create the first entry in an ini-style file (i.e. ```PARAMETER = value```):
+
+   ```bash-config --ini FILE parameter value```
 
 
-   To delete parameter:
-   
-      ```bash-config FILE parameter %```
-   
-   
-   To delete config file:
-   
-      ```bash-config FILE %```
+To use a custom separator (i.e. ```PARAMETER:value```) for read and write operations:
+
+   ```bash-config --custom : FILE parameter value```
+
+
+To access parameter value:
+
+   ```bash-config FILE parameter```
+
+
+To delete parameter:
+
+   ```bash-config FILE parameter %```
+
+
+To delete config file:
+
+   ```bash-config FILE %```
