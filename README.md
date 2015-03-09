@@ -4,7 +4,7 @@ Bash script to interact with configuration files. Great for easily implementing 
 
 
 Features
------
+--------
 
 * read/write/delete parameters with values
 * create and delete config files
@@ -15,7 +15,7 @@ Features
     * use custom delimeter
 
 Installation
------
+------------
    
 Copy bash-config to /usr/local/bin and then mark as executable.
    
@@ -50,3 +50,10 @@ To delete parameter:
 To delete config file:
 
    ```bash-config FILE %```
+
+License
+-------
+
+Copyright (c) 2015 Six (brbsix@gmail.com).
+
+Licensed under the GPLv3 license.
