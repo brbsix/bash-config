@@ -16,40 +16,33 @@ Features
 
 Installation
 ------------
-   
-Copy bash-config to /usr/local/bin and then mark as executable.
-   
-```sudo chmod a+x /usr/local/bin/bash-config```
+
+    sudo install bash-config /usr/local/bin
 
 Usage
 -----
 
-When accessing values, the config style is autodetected. When storing a value in a new file, it defaults to Bash-style (i.e. ```PARAMETER=value```).
-   
-   
-To create the first entry in an ini-style file (i.e. ```PARAMETER = value```):
+When accessing values, the config style is autodetected. When storing a value in a new file, it defaults to Bash-style (i.e. `PARAMETER=value`).
 
-   ```bash-config --ini FILE parameter value```
+To create the first entry in an ini-style file (i.e. `PARAMETER = value`):
 
+    bash-config --ini FILE parameter value
 
-To use a custom separator (i.e. ```PARAMETER:value```) for read and write operations:
+To use a custom separator (i.e. `PARAMETER:value`) for read and write operations:
 
-   ```bash-config --custom : FILE parameter value```
-
+    bash-config --custom : FILE parameter value
 
 To access parameter value:
 
-   ```bash-config FILE parameter```
-
+    bash-config FILE parameter
 
 To delete parameter:
 
-   ```bash-config FILE parameter %```
-
+    bash-config FILE parameter %
 
 To delete config file:
 
-   ```bash-config FILE %```
+    bash-config FILE %
 
 License
 -------
