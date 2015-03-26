@@ -2,7 +2,6 @@
 
 Bash script to interact with configuration files. Great for easily implementing basic config files in all of your Android, Linux, or OSX shell scripts.
 
-
 Features
 --------
 
@@ -14,14 +13,27 @@ Features
     * Window's ini-style
     * use custom delimeter
 
-Installation
-------------
+Linux Installation
+------------------
 
-To install on Linux systems:
+To install bash-config on Linux systems:
 
     sudo install bash-config /usr/local/bin
 
-To install on Android, you're typically going to put the script in `/data/local/bin` and mark it as executable. You'll probably want to make sure `/data/local/bin` is on your PATH.
+Android Installation
+--------------------
+
+*Running bash-config on Android requires Bash. Please see elsewhere for bash binaries and installation instructions. FYI: I do have a version of bash-config written for mksh that I'm happy to publish for anyone that is interested.*
+
+Copy bash-config to your bin folder and then mark as executable.
+
+    su
+    cp bash-config /data/local/bin
+    chmod 0755 /data/local/bin/bash-config
+
+*NOTE: You may need to add /data/local/bin to your PATH. This involves editing your shell's rc file. If you are using the default mksh shell, it is located at /system/etc/mkshrc. For Bash, it is most likely at /system/etc/bash/bashrc. Append the following to the end of the file:*
+
+    export PATH="$PATH:/data/local/bin"
 
 Usage
 -----
