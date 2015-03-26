@@ -17,7 +17,11 @@ Features
 Installation
 ------------
 
+To install on Linux systems:
+
     sudo install bash-config /usr/local/bin
+
+To install on Android, you're generally going to want to put the script in `/data/local/bin` and mark it as executable. You'll probably want to make sure `/data/local/bin` is on your PATH.
 
 Usage
 -----
