@@ -234,7 +234,4 @@ write_parameter(){
     verify_write
 }
 
-
-if [[ ${FUNCNAME[-1]} = main ]]; then
-    main "$@"
-fi
+main "$@"
