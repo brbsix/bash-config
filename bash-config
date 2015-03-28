@@ -3,11 +3,11 @@
 # Read and write config files from Bash
 
 
-declare -r SCRIPTNAME='bash-config'
-declare -r VERSION='0.1.dev1'
+readonly SCRIPTNAME='bash-config'
+readonly VERSION='0.1.dev1'
 
-declare -r SEPARATOR_BASH='='
-declare -r SEPARATOR_INI=' = '
+readonly SEPARATOR_BASH='='
+readonly SEPARATOR_INI=' = '
 
 
 error(){
