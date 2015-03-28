@@ -16,19 +16,22 @@ Features
 Linux Installation
 ------------------
 
-To install bash-config on Linux systems:
+To install bash-config on Linux:
 
     sudo install bash-config /usr/local/bin
 
 Android Installation
 --------------------
 
-*Running bash-config on Android requires Bash. Please see elsewhere for bash binaries and installation instructions. FYI: I do have a version of bash-config written for mksh that I'm happy to publish for anyone that is interested.*
+This script was originally written for Bash but now supports Android's default shell mksh as well.
 
-Copy bash-config to your bin folder and then mark as executable.
+The only external tools used by bash-config are grep and sed. If you are missing either of these then you should install busybox.
+
+Assuming you can download or otherwise transfer bash-config onto your phone, here are the installation instructions:
 
     su
     cp bash-config /data/local/bin
+    sed -i 's:#!/bin/bash:#!/system/bin/mksh:' /data/local/bin/bash-config  # update the shebang for Android's default shell
     chmod 0755 /data/local/bin/bash-config
 
 *NOTE: You may need to add /data/local/bin to your PATH. This involves editing your shell's rc file. If you are using the default mksh shell, it is located at /system/etc/mkshrc. For Bash, it is most likely at /system/etc/bash/bashrc. Append the following to the end of the file:*
