@@ -17,7 +17,7 @@ error(){
 get_line_number(){
     set_mode
     local output=$(sed -n "/^${parameter}${separator}/=" "$config" 2>/dev/null)
-    [[ $output =~ ^[1-9][0-9]*$ ]] && line_number="$output"
+    [[ ! -z ${output##*[!0-9]*} ]] && line_number="$output"
 }
 
 main(){
