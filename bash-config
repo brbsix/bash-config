@@ -204,9 +204,9 @@ usage(){
 		  -i, --ini             use ini mode ex. ' = '
 		  -v, --version         show program's version number and exit
 
-		- Enter a value to create or update an entry
-		- Specify only a parameter to print the currently set value (if any)
-		- Use '%' to delete the config file or a specific parameter
+		* Enter a value to create or update an entry
+		* Specify only a parameter to print the currently set value (if any)
+		* Use '%' to delete the config file or a specific parameter
 		EOF
         exit 0
 }
