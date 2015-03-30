@@ -130,7 +130,7 @@ read_parameter(){
 }
 
 remove_config(){
-    rm -f "$config" >/dev/null 2>&1
+    rm -f "$config" &>/dev/null
 
     if [[ -f $config ]]; then
         error "Failed to remove '$config'"
