@@ -188,7 +188,7 @@ set_mode(){
         mode=${mode[0]}
     fi
 
-    set_separator $mode
+    set_separator "$mode"
 }
 
 set_separator(){
@@ -236,7 +236,7 @@ write_parameter(){
             sort -o "$config" "$config"
         fi
     else
-        set_separator $option_mode
+        set_separator "$option_mode"
         echo "${parameter}${separator}${value}" >> "$config"
     fi
     verify_write
