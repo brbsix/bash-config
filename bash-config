@@ -155,7 +155,7 @@ sanitize_parameter(){
 }
 
 see_help_msg(){
-    echo "Try '$scriptfile --help' for more information." >&2
+    echo "Try '$PROGRAM --help' for more information." >&2
 }
 
 set_mode(){
