@@ -159,9 +159,11 @@ see_help_msg(){
 }
 
 set_mode(){
-    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_BASH}" "$config" 2>/dev/null && mode+=(bash)
-    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_INI}" "$config" 2>/dev/null && mode+=(ini)
-    [[ $option_mode = custom ]] && grep -q "^[A-Za-z0-9_-]\+${separator_custom}" "$config" 2>/dev/null && mode+=(custom)
+    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_BASH}" "$config" &>/dev/null && mode+=(bash)
+
+    grep -q "^[A-Za-z0-9_-]\+${SEPARATOR_INI}" "$config" &>/dev/null && mode+=(ini)
+
+    [[ $option_mode = custom ]] && grep -q "^[A-Za-z0-9_-]\+${separator_custom}" "$config" &>/dev/null && mode+=(custom)
 
     if (( ${#mode[@]} > 1 )); then
         error "Unable to determine a consistent configuration file format. Are you sure '$config' is a config file?"
