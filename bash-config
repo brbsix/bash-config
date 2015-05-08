@@ -3,7 +3,7 @@
 # Read and write config files from Bash
 
 
-readonly SCRIPTNAME='bash-config'
+readonly PROGRAM="${0##*/}"
 readonly VERSION='0.1.dev1'
 
 readonly SEPARATOR_BASH='='
@@ -21,8 +21,6 @@ get_line_number(){
 }
 
 main(){
-    scriptfile=${0##*/}
-
     if echo "$1" | grep -Eq '^(-b|--bash)$'; then
         option_mode=bash
     elif echo "$1" | grep -Eq '^(-c|--custom)$'; then
@@ -57,7 +55,7 @@ main(){
     elif (( args == 1 )) && echo "$1" | grep -Eq '^(-h|--help|help)$'; then
         usage
     elif (( args == 1 )) && echo "$1" | grep -Eq '^(-v|--version|version)$'; then
-        echo "$SCRIPTNAME $VERSION"
+        echo "$PROGRAM $VERSION"
         exit 0
     elif (( args == 2 )); then
         if [[ $parameter = % ]]; then
@@ -196,7 +194,7 @@ set_separator(){
 
 usage(){
         cat <<-EOF
-		Usage: $scriptfile [OPTION] <config file> <parameter> [value]
+		Usage: $PROGRAM [OPTION] <config file> <parameter> [value]
 		Read and write config files from bash.
 
 		  -b, --bash            use bash mode ex. '='
