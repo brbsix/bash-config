@@ -170,15 +170,22 @@ set_mode(){
         exit 1
     fi
 
-    if [[ -n $option_mode ]]; then  # OPTION IS SET
-        if [[ -n ${mode[0]} && ( ${mode[0]} != $option_mode ) ]]; then  # use detected mode in the event of a conflicting option
+    # OPTION IS SET
+    if [[ -n $option_mode ]]; then
+
+        if [[ -n ${mode[0]} && ( ${mode[0]} != $option_mode ) ]]; then
+            # use detected mode in the event of a conflicting option
             echo "WARNING: '$config' was intified as ${mode[0]} mode (ignoring $option_mode option)" >&2
             mode=${mode[0]}
         else
-            mode=$option_mode  # use optioned mode
+            # use optioned mode
+            mode=$option_mode
         fi
-    elif [[ -n ${mode[0]} ]]; then  # NO OPTION IS SET and we have detected mode
-        mode=${mode[0]}  # use detected mode
+
+    # NO OPTION IS SET and we have detected mode
+    elif [[ -n ${mode[0]} ]]; then
+        # use detected mode
+        mode=${mode[0]}
     fi
 
     set_separator $mode
@@ -190,7 +197,8 @@ set_separator(){
     elif [[ $1 = ini ]]; then
         separator=$SEPARATOR_INI
     else
-        separator=$SEPARATOR_BASH  # default to bash mode
+        # default to bash mode
+        separator=$SEPARATOR_BASH
     fi
 }
 
