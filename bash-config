@@ -11,7 +11,7 @@ readonly SEPARATOR_INI=' = '
 
 
 error(){
-    echo "ERROR: $@" >&2
+    echo "ERROR: $*" >&2
 }
 
 get_line_number(){
